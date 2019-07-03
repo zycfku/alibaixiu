@@ -42,6 +42,8 @@
             </div>
             <div class="form-group">
               <button class="btn btn-primary" type="button">添加</button>
+              <button class="btn btn-primary" type="button">编辑</button>
+              <button class="btn btn-primary" type="button">取消</button>
             </div>
           </form>
         </div>
@@ -150,9 +152,10 @@
       let name = $('#name').val();
       let slug = $('#slug').val();
       let classname = $('#classname').val();
-      // if(name == '' || slug == '' || classname == '') {
-      //    $('.alert-danger').text('输入值不能为空');
-      // }else{
+      if(name == '' || slug == '' || classname == '') {
+        $('.alert-danger').show().fadeOut(2000);
+         $('.alert-danger').text('输入值不能为空');
+      }else{
       $.ajax({
         type: 'post',
         url: 'api/add.php',
@@ -167,11 +170,25 @@
             $('#name').val('');
             $('#slug').val('');
             $('#classname').val('');
-            render();
+            var str='<tr>\n' +
+                                '  <td class="text-center"><input type="checkbox"></td>\n' +
+                                '  <td>'+name+'</td>\n' +
+                                '  <td>'+slug+'</td>\n' +
+                                '  <td>'+classname+'</td>\n' +
+                                '  <td class="text-center">\n' +
+                                '    <a href="javascript:;" class="btn btn-info btn-xs">编辑</a>\n' +
+                                '    <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>\n' +
+                                '  </td>\n' +
+                                '</tr>';
+                            $('tbody').append(str);
+             
+
           }
         }
       })
+      }
     });
+
     
   </script>
 </body>
