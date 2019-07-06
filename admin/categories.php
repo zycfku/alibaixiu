@@ -18,6 +18,7 @@
 
   <div class="main">
     <?php include 'public/nav.php' ?>
+
     <div class="container-fluid">
       <div class="page-title">
         <h1>分类目录</h1>
@@ -41,8 +42,8 @@
               <input id="classname" class="form-control" name="classname" type="text" placeholder="classname">
             </div>
             <div class="form-group">
-              <button class="btn btn-primary" type="button">添加</button>
-              <button class="btn btn-primary" type="button">编辑</button>
+              <button class="btn btn-primary add" type="button">添加</button>
+              <button class="btn btn-primary edit" type="button">编辑</button>
               <button class="btn btn-primary" type="button">取消</button>
             </div>
           </form>
@@ -92,7 +93,7 @@
       <td>{{v.name}}</td>
       <td>{{v.slug}}</td>
       <td>{{v.classname}}</td>
-      <td class="text-center edit">
+      <td class="text-center">
         <a href="javascript:;" class="btn btn-info btn-xs">编辑</a>
         <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
       </td>
@@ -121,14 +122,42 @@
     }
     render();
     $('tbody').on('click', '.btn-info', function() {
-      var td = $(this).parents('tr').children();
-      var name = td.eq(1).text();
-      var slug = td.eq(2).text();
-      var classname = td.eq(3).text();
+      let td = $(this).parents('tr').children();
+      let name = td.eq(1).text();
+      let slug = td.eq(2).text();
+      let classname = td.eq(3).text();
+      var that = this;
       $('#name').val(name);
       $('#slug').val(slug);
       $('#classname').val(classname);
+    $('.edit').on('click',function(){
+      let namenew =$('#name').val();
+      let slugnew =$('#slug').val();
+      let classnamenew = $('#classname').val();
+        $.ajax({
+        url: 'api/update.php',
+        type: 'post',
+        dataType: 'json',
+        data: {
+          name: namenew,
+          slug: slug,
+          classname: classnamenew,
+          slugnew: slugnew
+        },
+        success: function(res){
+          if(res.code ==1) {
+            $(that).parents('tr').children().eq(1).text(namenew);
+            $(that).parents('tr').children().eq(2).text(slugnew);
+            $(that).parents('tr').children().eq(3).text(classnamenew);
+            $('#name').val('');
+            $('#slug').val('');
+            $('#classname').val('');
+          }
+        }
+      });
+    })
     });
+    
     $('tbody').on('click', '.btn-danger', function() {
       if(window.confirm('确定要删除吗？')){
       let slug = $(this).parents('tr').children().eq(2).text();
@@ -148,7 +177,7 @@
       })
       };
     });
-    $('.btn-primary').on('click', function() {
+    $('.add').on('click', function() {
       let name = $('#name').val();
       let slug = $('#slug').val();
       let classname = $('#classname').val();
@@ -181,8 +210,6 @@
                                 '  </td>\n' +
                                 '</tr>';
                             $('tbody').append(str);
-             
-
           }
         }
       })

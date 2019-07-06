@@ -134,13 +134,14 @@
     NProgress.done()
   </script>
   <script>
+
      function render(pageNum,pageSize) {
       $.ajax({
        type: 'post',
        url: 'api/getinfo.php',
        data: {
          pageSize: pageSize || 10,
-         currentPage: currentPage || 1
+         pageNum: pageNum || 1
        },
        dataType: 'json',
        success: function(res) {
@@ -152,7 +153,7 @@
      });
      }
      render();
-     
+       
   </script>
 </body>
 
